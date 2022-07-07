@@ -1,7 +1,11 @@
 package com.ll.ssg_07_07;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 
 public class APP {
@@ -22,16 +26,28 @@ public class APP {
 
             switch (cmd) {
                 case "목록":
+
                     System.out.println("번호 / 작가 / 명언");
                     System.out.println("----------------");
-//                     구현하다 멈춤
-//                    if(wiseSayingLastId == 0){
-//                        System.out.println("아직 등록된 명언이 없습니다.");
-//                    }else{
-//                        for(int i = 0; i <wiseSayingLastId; i++ ){
-//                            System.out.printf("%d / %s / %s",wiseSayingLastId,author,content);
-//                        }
-//                    }
+                    if (wiseSayingLastId == 0) {
+                        System.out.println("아직 등록된 명언이 없습니다.");
+                    } else {
+
+                        List<String> lines = null;
+                        // 마지막으로 등록한 파일만 여러번 읽어주는 런타임오류 발견..
+                        try {
+                            for(int i = 0; i < wiseSayingLastId; i++){
+                                lines = Files.readAllLines(Paths.get(WiseSaying.id + "번째, " + WiseSaying.author + "의 명언.txt"));
+                                System.out.println(lines);
+                            }
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+
+                    }
+                    break;
 
 
                 case "등록":
@@ -45,10 +61,10 @@ public class APP {
                     System.out.println(WiseSaying);
 
                     try {
-                        OutputStream output = new FileOutputStream(id+"번째, "+author+"의 명언.txt");
+                        OutputStream output = new FileOutputStream(id + "번째, " + author + "의 명언.txt");
                         // 할일 1. 여기 content가 저장되는데 id,content,author 전부다 저장되게 만들어야됨(?)
-                        String str = content;
-                        byte[] by=str.getBytes();
+                        String str = WiseSaying.content;
+                        byte[] by = str.getBytes();
                         output.write(by);
 
                     } catch (Exception e) {
