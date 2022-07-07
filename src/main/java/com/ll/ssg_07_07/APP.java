@@ -5,11 +5,9 @@ import java.util.Scanner;
 public class APP {
     public void run() {
 
-        WiseSaying WiseSaying = new WiseSaying(id,content,author);
-        System.out.println(WiseSaying);
 
         // n번째 명언
-        int wiseSayingLastid = 0;
+        int wiseSayingLastId = 0;
 
 
         System.out.println("=== 명언 SSG ===");
@@ -22,12 +20,20 @@ public class APP {
 
             switch (cmd) {
                 case "등록":
-                    String content = sc.next().trim();
                     System.out.printf("명언 : ");
+                    String content = sc.next().trim();
                     System.out.printf("작가 : ");
                     String author = sc.next().trim();
-                    System.out.printf("%d번 명언이 등록되었습니다.\n", ++wiseSayingLastid);
+                    int id = ++wiseSayingLastId;  // 명언 번호 증가
+
+                    WiseSaying WiseSaying = new WiseSaying(id,content,author);
+                    System.out.println(WiseSaying);
+
+
+                    System.out.printf("%d번 명언이 등록되었습니다.\n",id);
                     break;
+
+
 
                 case "종료":
                     break outer;
