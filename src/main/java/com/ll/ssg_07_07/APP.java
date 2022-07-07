@@ -5,6 +5,9 @@ import java.util.Scanner;
 public class APP {
     public void run() {
 
+        WiseSaying WiseSaying = new WiseSaying(id,content,author);
+        System.out.println(WiseSaying);
+
         // n번째 명언
         int wiseSayingLastid = 0;
 
