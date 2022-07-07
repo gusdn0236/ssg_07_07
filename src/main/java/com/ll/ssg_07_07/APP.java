@@ -5,6 +5,8 @@ import java.util.Scanner;
 public class APP {
     public void run() {
 
+        int wiseSayingLast = 0;
+
         System.out.println("=== 명언 SSG ===");
         Scanner sc = new Scanner(System.in);
 
@@ -19,7 +21,7 @@ public class APP {
                     String content = sc.next().trim();
                     System.out.printf("작가 : ");
                     String author = sc.next().trim();
-                    System.out.println("1번 명언이 등록되었습니다.");
+                    System.out.printf("%d번 명언이 등록되었습니다.\n",++wiseSayingLast);
                     break;
 
                 case "종료":
