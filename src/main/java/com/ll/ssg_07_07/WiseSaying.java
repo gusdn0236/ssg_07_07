@@ -1,9 +1,9 @@
 package com.ll.ssg_07_07;
 
 public class WiseSaying {
-   static int id;
-   static String content;
-   static String author;
+    int id;
+    String content;
+    String author;
 
     public WiseSaying(int id, String content, String author) {
         this.id = id;
