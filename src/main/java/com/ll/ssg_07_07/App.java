@@ -6,13 +6,11 @@ import java.util.Scanner;
 
 public class App {
     public void run() {
-        System.out.println("== 명언 SSG ==");
-
         Scanner sc = new Scanner(System.in);
+        System.out.println("=== 명언 SSG ===");
 
-        // 가장 마지막 명언글의 번호
-        List<WiseSaying> wiseSayings = new ArrayList<>();
-        int wiseSayingLastId = 0;
+        List<WiseSaying> WList = new ArrayList<>();
+        int WiseSayingLastId = 0;
 
         outer:
         while (true) {
@@ -22,61 +20,98 @@ public class App {
             Rq rq = new Rq(cmd);
 
             switch (rq.getPath()) {
-                case "등록":
-                    System.out.printf("명언 : ");
-                    String content = sc.nextLine().trim();
-                    System.out.printf("작가 : ");
-                    String author = sc.nextLine().trim();
-                    int id = ++wiseSayingLastId; // 명언 글 번호 증가
-
-                    WiseSaying wiseSaying = new WiseSaying(id, content, author);
-                    wiseSayings.add(wiseSaying);
-
-                    System.out.printf("%d번 명언이 등록되었습니다.\n", id);
-                    break;
+// 삭제?id=2
                 case "삭제":
-                    // URL에 입력된 id 얻기
+
                     int paramId = rq.getIntParam("id", 0);
 
-                    // URL에 입력된 id가 없다면 작업중지
                     if (paramId == 0) {
-                        System.out.println("id를 입력해주세요.");
+                        System.out.printf("id를 입력해주세요\n");
                         continue;
                     }
 
-                    // URL에 입력된 id에 해당하는 명언객체 찾기
-                    WiseSaying wiseSaying__ = null;
+                    WiseSaying wisedel = null;
 
-                    for (WiseSaying wiseSaying___ : wiseSayings) {
-                        if (wiseSaying___.id == paramId) {
-                            wiseSaying__ = wiseSaying___;
+                    for (WiseSaying w : WList) {
+                        if (w.id == paramId) {
+                            wisedel = w;
                         }
                     }
-
-                    // 찾지 못했다면 중지
-                    if (wiseSaying__ == null) {
-                        System.out.printf("%d번 명언은 존재하지 않습니다..\n", paramId);
+                    if (wisedel == null) {
+                        System.out.printf("%d번 명언은 존재하지 않습니다.\n", paramId);
                         continue;
                     }
 
-                    // 입력된 id에 해당하는 명언객체를 리스트에서 삭제
-                    wiseSayings.remove(wiseSaying__);
-
+                    WList.remove(wisedel);
                     System.out.printf("%d번 명언이 삭제되었습니다.\n", paramId);
+
+
+                    break;
+                case "수정":
+                    int paramIdmod = rq.getIntParam("id", 0);
+
+                    if (paramIdmod == 0) {
+                        System.out.printf("id를 입력해주세요\n");
+                        continue;
+                    }
+
+                    WiseSaying wisemod = null;
+
+                    for (WiseSaying w : WList) {
+                        if (w.id == paramIdmod) {
+                            wisemod = w;
+                        }
+                    }
+                    if (wisemod == null) {
+                        System.out.printf("%d번 명언은 존재하지 않습니다.\n", paramIdmod);
+                        continue;
+                    }
+
+                    System.out.printf("명언(기존) : %s\n",wisemod.content);
+                    System.out.printf("명언 : ");
+                    wisemod.content = sc.nextLine().trim();
+                    System.out.printf("작가(기존) : %s\n",wisemod.author);
+                    System.out.printf("작가 : ");
+                    wisemod.author = sc.nextLine().trim();
+
+                    System.out.printf("%d번 명언이 수정되었습니다.\n", paramIdmod);
+
                     break;
                 case "목록":
-                    System.out.println("번호 / 작가 / 명언");
-                    System.out.println("-------------------");
-                    for (int i = wiseSayings.size() - 1; i >= 0; i--) {
-                        WiseSaying wiseSaying_ = wiseSayings.get(i);
-                        System.out.printf("%d / %s / %s\n", wiseSaying_.id, wiseSaying_.content, wiseSaying_.author);
+                    if (WiseSayingLastId == 0) {
+                        System.out.println("명언을 등록해주세요");
+                        break;
                     }
+                    System.out.println("번호 / 명언 / 작가");
+                    System.out.println("----------------");
+
+
+                    for (int i = WList.size() - 1; i >= 0; i--) {
+                        WiseSaying w = WList.get(i);
+                        System.out.printf("%d / %s / %s\n", w.id, w.content, w.author);
+                    }
+
                     break;
+
+                case "등록":
+                    System.out.printf("명언 : ");
+                    String content = sc.nextLine();
+                    System.out.printf("작가 : ");
+                    String author = sc.nextLine();
+                    int id = ++WiseSayingLastId;
+                    WiseSaying w = new WiseSaying(id, content, author);
+                    WList.add(w);
+
+
+                    System.out.printf("%d번째 명언이 등록되었습니다.\n", id);
+                    break;
+
                 case "종료":
                     break outer;
             }
+
+
         }
 
-        sc.close();
     }
 }
