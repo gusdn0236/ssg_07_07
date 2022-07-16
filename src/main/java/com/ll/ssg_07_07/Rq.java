@@ -5,12 +5,11 @@ import java.util.Map;
 
 public class Rq {
     String url;
+    String queryStr;
     String path;
-
 
     Map<String, String> queryParams;
 
-    //삭제?id=2&no=1
     public Rq(String url) {
         this.url = url;
         String[] urlBits = url.split("\\?", 2);
@@ -19,22 +18,22 @@ public class Rq {
         queryParams = new HashMap<>();
 
         if (urlBits.length == 2) {
-            String queryStr = urlBits[1];
+            queryStr = urlBits[1];
 
-            String[] paramBits = queryStr.split("&");
+            String[] bits = queryStr.split("&");
 
-            for (String paramBit : paramBits) {
-                String[] paramNameAndValue = paramBit.split("=");
+            for (String urlBit : bits) {
+                String[] paramNameAndValue = urlBit.split("=", 2);
+                String paramName_ = paramNameAndValue[0];
+                String paramValue = paramNameAndValue[1];
 
                 if (paramNameAndValue.length == 1) {
                     continue;
                 }
-                String paramName = paramNameAndValue[0].trim();
-                String paramValue = paramNameAndValue[1].trim();
 
-                queryParams.put(paramName, paramValue);
+                queryParams.put(paramName_, paramValue);
+
             }
-
         }
     }
 
@@ -44,13 +43,19 @@ public class Rq {
         }
 
         String paramValue = queryParams.get(paramName);
-      if(paramValue.length() == 0){
-          return defaultValue;
-      }
 
+        if (paramValue.length() == 0) {
+            return defaultValue;
+        }
+
+        return Integer.parseInt(paramValue);
     }
 
     public String getPath() {
         return path;
     }
 }
+
+
+
+
