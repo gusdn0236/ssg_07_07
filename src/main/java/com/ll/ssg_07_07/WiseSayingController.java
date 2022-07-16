@@ -5,32 +5,34 @@ import java.util.List;
 import java.util.Scanner;
 
 public class WiseSayingController {
-    List<WiseSaying> WList;
-    int WiseSayingLastId;
-    Scanner sc;
+
+
+    private Scanner sc;
+    private WiseSayingRepository wiseSayingRepository;
 
     WiseSayingController(Scanner sc) {
         this.sc = sc;
-        WList = new ArrayList<>();
-        WiseSayingLastId = 0;
+        wiseSayingRepository = new WiseSayingRepository();
+
     }
+
 
     public void write(Rq rq) {
         System.out.printf("명언 : ");
         String content = sc.nextLine().trim();
         System.out.printf("작가 : ");
         String author = sc.nextLine().trim();
-        int id = ++WiseSayingLastId;
+        int id = ++wiseSayingRepository.WiseSayingLastId;
         WiseSaying w = new WiseSaying(id, content, author);
-        WList.add(w);
+        wiseSayingRepository.WList.add(w);
         System.out.printf("%d번 명언이 등록되었습니다.\n", id);
     }
 
     public void list(Rq rq) {
         System.out.println("번호 / 명언 / 작가");
         System.out.println("----------------");
-        for (int i = 0; i < WList.size(); i++) {
-            WiseSaying w = WList.get(i);
+        for (int i = 0; i < wiseSayingRepository.WList.size(); i++) {
+            WiseSaying w = wiseSayingRepository.WList.get(i);
             System.out.printf("%d / %s / %s\n", w.id, w.content, w.author);
 
         }
@@ -45,14 +47,14 @@ public class WiseSayingController {
         }
 
 
-        WiseSaying wisedel = findById(paramId);
+        WiseSaying wisedel = wiseSayingRepository.findById(paramId);
 
         if (wisedel == null) {
             System.out.printf("%d 번 명언은 존재하지 않습니다.\n", paramId);
             return;
         }
 
-        WList.remove(wisedel);
+        wiseSayingRepository.WList.remove(wisedel);
         System.out.printf("%d번 명언이 삭제되었습니다.\n", paramId);
 
     }
@@ -65,7 +67,7 @@ public class WiseSayingController {
             return;
         }
 
-        WiseSaying wisemod = findById(paramIdmod);
+        WiseSaying wisemod = wiseSayingRepository.findById(paramIdmod);
 
 
         if (wisemod == null) {
@@ -84,13 +86,5 @@ public class WiseSayingController {
         System.out.printf("%d번 명언이 수정되었습니다.\n", paramIdmod);
     }
 
-    public WiseSaying findById(int paramId) {
-        for (WiseSaying w : WList) {
-            if (w.id == paramId) {
-                return w;
-            }
-        }
-        return null;
-    }
 
 }
