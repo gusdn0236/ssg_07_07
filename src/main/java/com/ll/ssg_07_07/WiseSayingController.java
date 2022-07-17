@@ -1,6 +1,5 @@
 package com.ll.ssg_07_07;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,17 +21,20 @@ public class WiseSayingController {
         String content = sc.nextLine().trim();
         System.out.printf("작가 : ");
         String author = sc.nextLine().trim();
-        int id = ++wiseSayingRepository.WiseSayingLastId;
-        WiseSaying w = new WiseSaying(id, content, author);
-        wiseSayingRepository.WList.add(w);
-        System.out.printf("%d번 명언이 등록되었습니다.\n", id);
+
+        WiseSaying wiseSaying = wiseSayingRepository.write(content,author);
+
+        System.out.printf("%d번 명언이 등록되었습니다.\n", wiseSaying.id);
     }
 
     public void list(Rq rq) {
         System.out.println("번호 / 명언 / 작가");
         System.out.println("----------------");
-        for (int i = 0; i < wiseSayingRepository.WList.size(); i++) {
-            WiseSaying w = wiseSayingRepository.WList.get(i);
+
+        List<WiseSaying> WList = wiseSayingRepository.findAll();
+
+        for (int i = 0; i < WList.size(); i++) {
+            WiseSaying w = WList.get(i);
             System.out.printf("%d / %s / %s\n", w.id, w.content, w.author);
 
         }
@@ -54,7 +56,9 @@ public class WiseSayingController {
             return;
         }
 
-        wiseSayingRepository.WList.remove(wisedel);
+
+
+       wiseSayingRepository.remove(paramId);
         System.out.printf("%d번 명언이 삭제되었습니다.\n", paramId);
 
     }
@@ -78,10 +82,13 @@ public class WiseSayingController {
 
         System.out.printf("명언(기존) %s\n", wisemod.content);
         System.out.printf("명언 : ");
-        wisemod.content = sc.nextLine().trim();
+        String content = sc.nextLine().trim();
         System.out.printf("작가(기존) %s\n", wisemod.author);
         System.out.printf("작가 : ");
-        wisemod.author = sc.nextLine().trim();
+       String author = sc.nextLine().trim();
+
+        wiseSayingRepository.modify(paramIdmod,content,author);
+
 
         System.out.printf("%d번 명언이 수정되었습니다.\n", paramIdmod);
     }

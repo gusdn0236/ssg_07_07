@@ -5,13 +5,21 @@ import java.util.List;
 
 public class WiseSayingRepository {
 
-    public List<WiseSaying> WList;
-    public int WiseSayingLastId;
+    private List<WiseSaying> WList;
+    private int WiseSayingLastId;
 
-    WiseSayingRepository(){
+    WiseSayingRepository() {
         WList = new ArrayList<>();
         WiseSayingLastId = 0;
     }
+
+    public void modify(int paramIdmod, String content, String author) {
+        WiseSaying wisemod = findById(paramIdmod);
+
+        wisemod.content = content;
+        wisemod.author = author;
+    }
+
 
     public WiseSaying findById(int paramId) {
         for (WiseSaying w : WList) {
@@ -20,5 +28,22 @@ public class WiseSayingRepository {
             }
         }
         return null;
+    }
+
+    public List<WiseSaying> findAll() {
+        return WList;
+
+    }
+
+    public WiseSaying write(String content, String author) {
+        int id = ++WiseSayingLastId;
+        WiseSaying wiseSaying = new WiseSaying(id, content, author);
+        WList.add(wiseSaying);
+        return wiseSaying;
+    }
+
+    public void remove(int paramId) {
+        WiseSaying wisedel = findById(paramId);
+        WList.remove(wisedel);
     }
 }
